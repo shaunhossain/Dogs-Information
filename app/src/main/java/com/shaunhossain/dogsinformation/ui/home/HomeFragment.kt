@@ -14,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.shaunhossain.dogsinformation.R
 import com.shaunhossain.dogsinformation.adapter.DogsAdapter
+import com.shaunhossain.dogsinformation.adapter.LoadingStateAdapter
 import com.shaunhossain.dogsinformation.databinding.FragmentHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -58,7 +59,10 @@ class HomeFragment : Fragment() {
             recyclerview.apply {
                 setHasFixedSize(true)
                 layoutManager = GridLayoutManager(requireContext(),2)
-                adapter = dogsAdapter
+                adapter = dogsAdapter.withLoadStateHeaderAndFooter(
+                    header = LoadingStateAdapter{dogsAdapter.retry()},
+                    footer = LoadingStateAdapter{dogsAdapter.retry()}
+                )
             }
         }
     }
